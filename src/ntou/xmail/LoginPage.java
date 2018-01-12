@@ -18,8 +18,10 @@ import javax.swing.JScrollPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.UIManager;
 
@@ -62,7 +64,6 @@ public class LoginPage {
 		try {
 			image = ImageIO.read(new File(logopath));
 		} catch (IOException e) {
-			// TODO 自動產生的 catch 區塊
 			e.printStackTrace();
 		}
 		
@@ -85,6 +86,25 @@ public class LoginPage {
 		passwordField = new JPasswordField();
 		passwordField.setBounds(773, 243, 190, 35);
 		frame.getContentPane().add(passwordField);
+		passwordField.addActionListener(new ActionListener()
+				{
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						JLabel capswarn = new JLabel("Caps Lock已經啟用");
+						capswarn.setFont(new Font("微軟正黑體", Font.PLAIN, 14));
+						capswarn.setBounds(773, 251, 190, 35);
+						System.out.println(Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK));
+						//caps-lock active
+						if(Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK))
+						{
+							capswarn.setVisible(true);
+							frame.getContentPane().add(capswarn);
+						}
+						else capswarn.setVisible(false);
+					}
+			
+				});
 		
 		JScrollPane scrollPane = new JScrollPane(new JLabel(new ImageIcon(image)));
 		scrollPane.setBounds(0, 0, 745, 561);
@@ -94,6 +114,21 @@ public class LoginPage {
 		btnLogin.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
 		btnLogin.setBounds(822, 314, 87, 23);
 		frame.getContentPane().add(btnLogin);
+		btnLogin.addActionListener(new ActionListener()
+				{
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						String account = accountField.getText();
+						String password = passwordField.getText();
+						System.out.println(account + "/" + password);
+						
+						
+					}
+			
+				});
+		
+		
 		
 		JButton btnClear = new JButton("Clear");
 		btnClear.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
@@ -128,7 +163,7 @@ public class LoginPage {
 		frame.getContentPane().add(label_2);
 	}
 	
-	//Font Prop
+	//Font Properties
 	public static void setUIFont (javax.swing.plaf.FontUIResource f){
 	    java.util.Enumeration keys = UIManager.getDefaults().keys();
 	    while (keys.hasMoreElements()) {
