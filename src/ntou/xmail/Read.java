@@ -1,4 +1,4 @@
-package ntou.xmail;
+﻿package ntou.xmail;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -58,9 +58,7 @@ public class  Read extends JFrame
 				props.put("mail.smtp.socketFactory.fallback", "false");
 				props.put("mail.smtp.socketFactory.port", "994");
 	
-				//String username = "00457053@mail.ntou.edu.tw";
-				//String password = "A129765143";
-	
+									
 				Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 					protected PasswordAuthentication getPasswordAuthentication() {
 						return new PasswordAuthentication(userName, password);

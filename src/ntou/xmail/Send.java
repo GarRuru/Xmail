@@ -32,11 +32,7 @@ public class Send {
 	
 	public static void SendMAIL() throws MessagingException, IOException {
 
-		/*final String to = "00457053@mail.ntou.edu.tw";
-		final String from = "00457053@mail.ntou.edu.tw";
-
-		final String username = "00457053@mail.ntou.edu.tw";
-		final String password = "·F§A®Q";*/
+		
 
 		Properties props = setProperties();
 
