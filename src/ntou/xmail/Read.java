@@ -1,6 +1,7 @@
 package ntou.xmail;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -23,7 +24,7 @@ import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.util.MailSSLSocketFactory;
 
 public class Read extends JFrame {
-	public static ArrayList<mailFormat> Storage = new ArrayList();
+	public static ArrayList<mailFormat> Storage = new ArrayList<mailFormat>();
 	static Properties props = System.getProperties();
 	private static String userName;
 	private static String password;
@@ -70,11 +71,16 @@ public class Read extends JFrame {
 
 			return true; // 準備跳轉
 		}
+		
 		// POP3登入失敗
 		catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "帳號或密碼不正確", "Login Failed", JOptionPane.ERROR_MESSAGE);
+			if(!e.toString().contains("javax.mail.Messaging"))
+				JOptionPane.showMessageDialog(null, "帳號或密碼不正確", "Login Failed", JOptionPane.ERROR_MESSAGE);
+			else	//UnknownHostException
+				JOptionPane.showMessageDialog(null,"無法連線到伺服器，請檢查網路設定", "No Internet Connection!",JOptionPane.WARNING_MESSAGE);
 			return false; // 停在登入畫面
+			
 
 		}
 	}
@@ -93,6 +99,7 @@ public class Read extends JFrame {
 	}
 
 	public void ReadMailbox(Folder F) throws IOException {
+		Storage.clear();
 		try {
 			if (F.exists())
 				F.open(Folder.READ_ONLY);

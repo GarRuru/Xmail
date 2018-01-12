@@ -3,7 +3,10 @@ package ntou.xmail;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
+import javax.mail.Message;
+
 public class mailFormat {
+	private Message msg;
 	private String sender;
 	private String[] senderEmail;
 	private String date;
@@ -16,6 +19,7 @@ public class mailFormat {
 	}
 	public mailFormat(String sender,String date,String subject,String context,int option)
 	{
+
 		this.sender = sender;
 		this.date = date;
 		this.subject = subject;
@@ -68,6 +72,11 @@ public class mailFormat {
 	public String getContext()
 	{
 		return context;
+	}
+	
+	public Message getMSG()
+	{
+		return msg;
 	}
 	
 	private void convert_UTF8()

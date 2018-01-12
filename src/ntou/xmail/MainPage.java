@@ -1,6 +1,5 @@
 package ntou.xmail;
 
-import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,17 +7,21 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
+import javax.mail.Flags;
 import javax.mail.MessagingException;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
 import data.SignatureManagerUI;
@@ -27,6 +30,7 @@ public class MainPage extends JFrame{
 	private String account;
 	private JFrame frame;
 	private String[] accountINFO;
+	private int mailCount;
 	/**
 	 * Launch the application.
 	 */
@@ -52,18 +56,34 @@ public class MainPage extends JFrame{
 		accountINFO = new String[2];
 		accountINFO[0] =  ACCOUNT; accountINFO[1] = PWD;
 		account = string;
+        JOptionPane loadingPane = new JOptionPane("讀取信件列表中...",JOptionPane.INFORMATION_MESSAGE,JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+        final JDialog dialog = loadingPane.createDialog("請稍候");
+        
+        new SwingWorker<Void,Void>()
+        {
+        	@Override
+        	protected Void doInBackground() throws Exception
+        	{
+        		//Reload
+        		try {
+					SA.getFolderList();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (MessagingException e1) {
+					e1.printStackTrace();
+				}
 
-		try {
-			SA.getFolderList();
-			//SA.ReadMailbox("INBOX");
-		} catch (IOException e) {
-			// TODO 自動產生的 catch 區塊
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			// TODO 自動產生的 catch 區塊
-			e.printStackTrace();
-		}
-		
+				Thread.sleep(1000);
+				return null;
+        	}
+        	
+        	protected void done()
+        	{
+        		dialog.dispose();
+        	};
+        }.execute();
+        
+        dialog.setVisible(true);
 		initialize(SA);
 	}
 
@@ -71,6 +91,7 @@ public class MainPage extends JFrame{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize(Read SA) {
+		mailCount = 0;
 		frame = new JFrame(account);
 		String mailUIDisplay = account.substring(7);
 		frame.setBounds(100, 100, 1000, 600);
@@ -82,29 +103,29 @@ public class MainPage extends JFrame{
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 		
+		JLabel label = new JLabel("\u5C01\u4FE1\u4EF6");
+		label.setBounds(339, 20, 46, 15);
+		panel.add(label);
+		JLabel mailCounter = new JLabel("");
+		mailCounter.setFont(new Font("Trebuchet MS", Font.PLAIN, 16));
+		mailCounter.setBounds(313, 13, 39, 25);
+		panel.add(mailCounter);
+
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(500, 49, 484, 512);
 		frame.getContentPane().add(panel_2);
 		panel_2.setLayout(null);
 		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 84, 464, 418);
+		panel_2.add(scrollPane_1);
+		
 		JTextArea mpContext = new JTextArea();
+		scrollPane_1.setViewportView(mpContext);
 		
 		mpContext.setEditable(false);
 		mpContext.setLineWrap(true);
-		mpContext.setBounds(10, 84, 464, 418);
-		
-		//JScrollPane sp = new JScrollPane(mpContext);
-		//sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
-		
-		
-		//JScrollPane sp = new JScrollPane(mpContext,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		//mpContext.add(sp);
-		//JScrollPane sp = new JScrollPane();
-		//sp.setViewportView(mpContext);
-		//frame.getContentPane().add(sp);
-		panel_2.add(mpContext);
 				
 		JLabel mpSenderT = new JLabel("\u5BC4\u4EF6\u4EBA:");
 		mpSenderT.setBounds(10, 10, 46, 15);
@@ -151,7 +172,7 @@ public class MainPage extends JFrame{
 				WriteNewMail nm = new WriteNewMail(accountINFO);
 			}
 		});
-		writeNewMail.setBounds(10, 50, 180, 38);
+		writeNewMail.setBounds(10, 50, 135, 23);
 		panel.add(writeNewMail);
 		
 		//Vector mailVect = new Vector();
@@ -161,15 +182,17 @@ public class MainPage extends JFrame{
 		//JList mailPreviewList = new JList(mailVect);
 		DefaultListModel model = new DefaultListModel();
 		for(mailFormat m: SA.Storage)
+		{
+			mailCount++;
 			model.addElement(m);
-		
-		
+		}
+		mailCounter.setText(String.valueOf(mailCount));
 		
 		//資料夾列表
 		JList mailFolderList = new JList(SA.folder);
 		mailFolderList.setFont(new Font("微軟正黑體 Light", Font.PLAIN, 18));
 		mailFolderList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		mailFolderList.setBounds(10, 113, 180, 370);
+		mailFolderList.setBounds(10, 116, 180, 367);
 		mailFolderList.setSelectedIndex(0);
 		panel.add(mailFolderList);
 		
@@ -185,12 +208,70 @@ public class MainPage extends JFrame{
 		});
 		calculatorButton.setBounds(17, 493, 128, 23);
 		panel.add(calculatorButton);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(209, 43, 281, 508);
+		panel.add(scrollPane);
 		JList mailPreviewList = new JList(model);
-		mailPreviewList.setBounds(209, 10, 281, 541);
-		panel.add(mailPreviewList);
+		scrollPane.setViewportView(mailPreviewList);
 		mailPreviewList.setCellRenderer(new MyListCellRenderer());
 		mailPreviewList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		mailPreviewList.setFont(new Font("微軟正黑體", Font.PLAIN, 14));
+		
+		JButton refreshBtn = new JButton("\u91CD\u65B0\u6574\u7406");
+		refreshBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//clear ALL List Elements
+				DefaultListModel listModel = (DefaultListModel) mailPreviewList.getModel();
+		        listModel.removeAllElements();
+
+		        JOptionPane loadingPane = new JOptionPane("讀取信件列表中...",JOptionPane.INFORMATION_MESSAGE,JOptionPane.DEFAULT_OPTION, null, new Object[]{}, null);
+		        final JDialog dialog = loadingPane.createDialog("請稍候");
+		        
+		        new SwingWorker<Void,Void>()
+		        {
+		        	@Override
+		        	protected Void doInBackground() throws Exception
+		        	{
+		        		//Reload
+		        		try {
+							SA.getFolderList();
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						} catch (MessagingException e1) {
+							e1.printStackTrace();
+						}
+						int tempCount = 0;
+						for(mailFormat m: SA.Storage)
+						{
+							tempCount++;
+							model.addElement(m);
+						}
+						mailPreviewList.setCellRenderer(new MyListCellRenderer());
+						mailPreviewList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+						mailPreviewList.setFont(new Font("微軟正黑體", Font.PLAIN, 14));
+						mailCounter.setText(String.valueOf(tempCount));
+						if(tempCount > mailCount)
+						{
+							mailCount = tempCount;
+							JOptionPane.showMessageDialog(null,"You got Mail!" , "收到新郵件!",JOptionPane.INFORMATION_MESSAGE);
+						}
+						Thread.sleep(1000);
+						return null;
+		        	}
+		        	
+		        	protected void done()
+		        	{
+		        		dialog.dispose();
+		        	};
+		        }.execute();
+		        
+		        dialog.setVisible(true);
+			}
+		});
+		refreshBtn.setBounds(10, 83, 135, 23);
+		panel.add(refreshBtn);
+		
 		mailPreviewList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e)
@@ -230,6 +311,18 @@ public class MainPage extends JFrame{
 		deleteButton.setBounds(20, 18, 87, 23);
 		deleteButton.setVisible(false);
 		panel_3.add(deleteButton);
+		deleteButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					SA.Storage.get(mailPreviewList.getSelectedIndex()).getMSG().setFlag(Flags.Flag.DELETED, true);
+				} catch (MessagingException e1) {
+					e1.printStackTrace();
+				}
+			}
+			
+		});
 		
 		JButton replyButton = new JButton("\u56DE\u8986");
 		replyButton.setIcon(new ImageIcon("/replyico.png"));

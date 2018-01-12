@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -87,12 +88,11 @@ public class LoginPage {
 		
 		
 		accountField = new JTextField();
-
 		accountField.setBounds(773, 165, 190, 35);
 		frame.getContentPane().add(accountField);
 		accountField.setColumns(10);
 		accountField.addKeyListener(new KeyListener() {
-
+			
 			@Override
 			public void keyPressed(KeyEvent ke) {
 				int key = ke.getKeyCode();
@@ -100,7 +100,7 @@ public class LoginPage {
 				{
 					if(MailBoxList.getSelectedItem().toString() == "NTOU Mail")
 						SendRequest();
-					else
+					else if (MailBoxList.getSelectedItem().toString() == "PPT站內信")
 						try {
 							PTTRequest();
 						} catch (Exception e) {
@@ -135,7 +135,7 @@ public class LoginPage {
 				{
 					if(MailBoxList.getSelectedItem().toString() == "NTOU Mail")
 						SendRequest();
-					else
+					else if (MailBoxList.getSelectedItem().toString() == "PPT站內信")
 						try {
 							PTTRequest();
 						} catch (Exception e) {
@@ -192,7 +192,7 @@ public class LoginPage {
 			public void actionPerformed(ActionEvent e) {
 				if(MailBoxList.getSelectedItem().toString() == "NTOU Mail")
 					SendRequest();
-				else
+				else if (MailBoxList.getSelectedItem().toString() == "PPT站內信")
 					try {
 						PTTRequest();
 					} catch (Exception e1) {
@@ -231,6 +231,11 @@ public class LoginPage {
 		label_2.setFont(new Font("微軟正黑體", Font.PLAIN, 14));
 		label_2.setBounds(773, 210, 110, 23);
 		frame.getContentPane().add(label_2);
+		
+		JLabel lblXmailBeta = new JLabel("Xmail 0.94.87 beta");
+		lblXmailBeta.setFont(new Font("Kristen ITC", Font.PLAIN, 14));
+		lblXmailBeta.setBounds(848, 546, 136, 15);
+		frame.getContentPane().add(lblXmailBeta);
 	}
 
 	// Font Properties
@@ -257,7 +262,8 @@ public class LoginPage {
 		System.out.println(account + "/"); // + password);
 		// Server Authorization
 		Read SA = new Read(account, password);
-		loginSuccess = SA.logintoServer();
+	
+			loginSuccess = SA.logintoServer();
 
 		if (loginSuccess)// if correct go next frame
 		{

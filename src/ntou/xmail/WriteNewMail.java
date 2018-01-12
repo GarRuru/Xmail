@@ -4,13 +4,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-import javax.mail.MessagingException;
+import javax.mail.Message;
 import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -18,6 +21,7 @@ import data.SignatureManagerUI;
 
 public class WriteNewMail {
 
+	public sendMail itssendMail;
 	private String[] accountdata;
 	private JFrame frame;
 	private JTextField sendToField;
@@ -25,6 +29,7 @@ public class WriteNewMail {
 	private JTextField SubjectField;
 	private JTextArea contField;
 	private Multipart multipart;
+	private JScrollPane scrollPane;
 
 	public WriteNewMail(String[] arg) {
 		/**
@@ -38,23 +43,28 @@ public class WriteNewMail {
 	}
 
 	// reply-method
-	
-	  public WriteNewMail(String[] arg,String val,String resub) {
-	  
-	  accountdata = arg; initialize(); sendToField.setText(val); multipart = new
-	  MimeMultipart(); SubjectField.setText("Re: " + resub);
-	  
-	  }
-	 
+
+	public WriteNewMail(String[] arg, String val, String resub) {
+
+		accountdata = arg;
+		initialize();
+		sendToField.setText(val);
+		multipart = new MimeMultipart();
+		SubjectField.setText("Re: " + resub);
+
+	}
+
 	// forward-method
-	
-	  public WriteNewMail(String[] arg,String resub) {
-	  
-	  accountdata = arg; multipart = new MimeMultipart(); initialize();
-	  SubjectField.setText("Fwd: " + resub);
-	 
-	  }
-	 
+
+	public WriteNewMail(String[] arg, String resub) {
+
+		accountdata = arg;
+		multipart = new MimeMultipart();
+		initialize();
+		SubjectField.setText("Fwd: " + resub);
+
+	}
+
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -78,18 +88,21 @@ public class WriteNewMail {
 		label_1.setBounds(10, 89, 46, 15);
 		frame.getContentPane().add(label_1);
 
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 150, 664, 201);
+		frame.getContentPane().add(scrollPane);
+
 		contField = new JTextArea();
-		contField.setBounds(10, 150, 664, 201);
+		scrollPane.setViewportView(contField);
 		contField.setLineWrap(true);
-		frame.getContentPane().add(contField);
 		SignatureManagerUI SMU;
 		try {
 			SMU = new SignatureManagerUI();
-			contField.setText("\n\n\n--------------------\n\n"+SMU.getSignature());
+			contField.setText("\n\n\n--------------------\n\n" + SMU.getSignature());
+
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		
 
 		sendToField = new JTextField();
 		sendToField.setBounds(66, 36, 608, 21);
@@ -109,7 +122,7 @@ public class WriteNewMail {
 		JButton sendButton = new JButton("\u5BC4\u51FA");
 		sendButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Send mail
+
 				mailFormat MFF = new mailFormat(accountdata[0], sendToField.getText(), SubjectField.getText(),
 						contField.getText(), 0);
 				sendMail ss = new sendMail(MFF, multipart);

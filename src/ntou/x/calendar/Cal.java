@@ -347,10 +347,10 @@ public class Cal extends javax.swing.JFrame
               jButton3ActionPerformed(evt);
             }
           });
-        }//建立查詢按鈕結束
-        {//建立目前年月位置標籤開始
+        }
+        {
           int[] now = new int[3];
-          now = getdate();//預設為當年當月
+          now = getdate();
           String year5,smonth;
           year5 = String.valueOf(now[0]);
           smonth = String.valueOf(now[1]);
@@ -361,55 +361,55 @@ public class Cal extends javax.swing.JFrame
           jDesktopPane1.add(jLabel5);
           jLabel5.setText(year5+" 年 "+smonth+" 月");
           jLabel5.setBounds(252, 7, 120, 21);
-          jLabel5.setForeground(new java.awt.Color(255,255,255));//設定字體為白色
-        }//建立目前年月位置標籤結束
-        {//預設為當年當月日期按鈕產生開始
+          jLabel5.setForeground(new java.awt.Color(255,255,255));
+        }
+        {
           int[] now = new int[3];
           now = getdate();
-          date_btn_create(now[0],now[1]);//產生日期按鈕
-        }//預設為當年當月日期按鈕產生結束
+          date_btn_create(now[0],now[1]);
+        }
       }
       pack();
       this.setSize(444, 296);
-    } catch (Exception e) {//例外處理
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
   
-  private void jButton1ActionPerformed(ActionEvent evt)//清除按鈕按下觸發事件
+  private void jButton1ActionPerformed(ActionEvent evt)
   {
-    jTextArea1.setText("");//清除記事內容
+    jTextArea1.setText("");
     String year,month,day,filename,insert_str;
     year = jLabel5.getText().substring(0,4);
     month = jLabel5.getText().substring(7,9);
     day = jLabel7.getText();
     filename = year+month+day;
-    File file=new File(filename+".txt");//刪除當日記事檔案
+    File file=new File(filename+".txt");
     file.delete();
-    new_btn();//重新產生按鈕
-    jLabel6.setText("行事曆已清除");//設定相關訊息
+    new_btn();
+    jLabel6.setText("行事曆已清除");
     jLabel7.setText("");
     jLabel8.setText("目前無選擇日期");
   }
   
-  private void jButton2ActionPerformed(ActionEvent evt)//儲存按鈕按下觸發事件開始
+  private void jButton2ActionPerformed(ActionEvent evt)
   {
     String year,month,day,filename,insert_str;
     year = jLabel5.getText().substring(0,4);
     month = jLabel5.getText().substring(7,9);
     day = jLabel7.getText();
     filename = year+month+day;
-    insert_str = jTextArea1.getText();//記事內容
-    if (insert_str.length() != 0 && day.length() != 0)//若記事框內有文字且有選擇日期則儲存記事檔案
+    insert_str = jTextArea1.getText();
+    if (insert_str.length() != 0 && day.length() != 0)
     {
       try
       {
-        FileWriter fw=new FileWriter(filename+".txt");//啟用檔案寫入
-        BufferedWriter bfw=new BufferedWriter(fw);//啟用緩衝區寫入
-        bfw.write(insert_str); //將Textarea內容寫入緩衝區裡
-        bfw.flush();//將緩衝區資料寫到檔案
-        fw.close();//關閉檔案
-        jLabel6.setText("行事曆已記錄");//設定相關訊息
+        FileWriter fw=new FileWriter(filename+".txt");
+        BufferedWriter bfw=new BufferedWriter(fw);
+        bfw.write(insert_str); 
+        bfw.flush();
+        fw.close();
+        jLabel6.setText("行事曆已記錄");
         jLabel7.setText("");
         jLabel8.setText("目前無選擇日期");
         new_btn();
@@ -418,16 +418,16 @@ public class Cal extends javax.swing.JFrame
         e.printStackTrace();
       }
     }
-    else//若無記事內容或無選擇日期
+    else
     {
       if (day.length() == 0)
-        jLabel6.setText("日期未選擇");//設定相關訊息
+        jLabel6.setText("日期未選擇");
       else
         jLabel6.setText("行事曆無內容");
     }
-  }//儲存按鈕按下觸發事件結束
+  }
   
-  private void jButton3ActionPerformed(ActionEvent evt)//查詢按鈕按下觸發事件開始
+  private void jButton3ActionPerformed(ActionEvent evt)
   {
     String syear,smonth;
     try
@@ -438,18 +438,18 @@ public class Cal extends javax.swing.JFrame
       smonth = String.valueOf(jComboBox1.getSelectedIndex() + 1);
       if (smonth.length() == 1)
             smonth = "0"+smonth;
-      if (syear == "" || Integer.parseInt(syear)<1582)//若未輸入年份就觸發例外(1582年以前曾經改曆過，結果會不準確)
+      if (syear == "" || Integer.parseInt(syear)<1582)
       {
         int[] now = new int[3];
         now = getdate();
-        syear = String.valueOf(now[0]);//若選擇年份小於1582年則預設為當年
-        jLabel6.setText("請選1582以上");
+        syear = String.valueOf(now[0]);
+        //jLabel6.setText("請選1582以上");
       }
       jLabel5.setText(syear+" 年 "+smonth+" 月");
       date_btn_create(Integer.parseInt(syear),Integer.parseInt(smonth));
       jLabel7.setText("");
       jLabel8.setText("目前無選擇日期");
-    }catch(NumberFormatException e)//例外處理設定為當年及選擇的月份
+    }catch(NumberFormatException e)
     {
       int[] now = new int[3];
       now = getdate();
@@ -458,45 +458,45 @@ public class Cal extends javax.swing.JFrame
       if (smonth.length() == 1)
             smonth = "0"+smonth;
       jLabel5.setText(syear+" 年 "+smonth+" 月");
-      jLabel6.setText("請選1582以上");
+      //jLabel6.setText("請選1582以上");
       date_btn_create(Integer.parseInt(syear),Integer.parseInt(smonth));
       jLabel7.setText("");
       jLabel8.setText("目前無選擇日期");
     }
-  }//查詢按鈕按下觸發事件結束
+  }
   
-  private void btnActionPerformed(ActionEvent evt)//日期按鈕按下觸發事件開始
+  private void btnActionPerformed(ActionEvent evt)
   {
     jTextArea1.setText("");
     String year,month,btn_date,filename,read_str;
-    year = jLabel5.getText().substring(0,4);//取得年
-    month = jLabel5.getText().substring(7,9);//取得月
-    btn_date = evt.getActionCommand();//取得按下按鈕文字(日)
+    year = jLabel5.getText().substring(0,4);
+    month = jLabel5.getText().substring(7,9);
+    btn_date = evt.getActionCommand();
     filename = year+month+btn_date;
     jLabel7.setText(btn_date);
     try
     {
-      FileReader fr = new FileReader(filename+".txt");//讀取選擇日期記事檔案
-      BufferedReader bfr = new BufferedReader(fr);//將檔案讀到緩衝區
+      FileReader fr = new FileReader(filename+".txt");
+      BufferedReader bfr = new BufferedReader(fr);
       boolean flag=false;//旗標
-      while((read_str = bfr.readLine())!=null) // 每次讀取一行，直到檔案結束
+      while((read_str = bfr.readLine())!=null) 
       {
-        if (flag)//從第二行開始每一行第一個位置加入斷行
+        if (flag)
           jTextArea1.append("\n");
-        jTextArea1.append(read_str);//加入該行訊息
+        jTextArea1.append(read_str);
         flag=true;
         
       }
       jLabel6.setText("當天記事");
       jLabel8.setText("已選擇"+year+"年"+month+"月"+btn_date+"日");
       fr.close();
-    }catch(FileNotFoundException e)//如果沒有指定的記事檔案就印出當日無行事曆(例外處理)
+    }catch(FileNotFoundException e)
     {
       jLabel6.setText("當日無行事曆");
       jLabel8.setText("已選擇"+year+"年"+month+"月"+btn_date+"日");
-    }catch(IOException e)//例外處理
+    }catch(IOException e)
     {
       e.printStackTrace();
     }
-  }//日期按鈕按下觸發事件結束
+  }
 }
