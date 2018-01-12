@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import java.awt.BorderLayout;
 import javax.swing.JTextField;
@@ -21,7 +22,10 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.UIManager;
 
@@ -29,6 +33,7 @@ public class LoginPage {
 	private JFrame frame;
 	private JTextField accountField;
 	private JPasswordField passwordField;
+	Read SA;	//NTOU-login Method
 	String logopath = "email.png";
 	BufferedImage image;
 
@@ -73,38 +78,66 @@ public class LoginPage {
 		frame.getContentPane().setLayout(null);
 		
 		accountField = new JTextField();
+		
 		accountField.setBounds(773, 165, 190, 35);
 		frame.getContentPane().add(accountField);
 		accountField.setColumns(10);
 		
 		
-		final String[] mailList = {"Gmail", "Outlook" , "PPT" };
+		final String[] mailList = {"NTOU Mail","Gmail", "PPT" };
 		JComboBox MailBoxList = new JComboBox(mailList);
 		MailBoxList.setBounds(773, 88, 190, 35);
 		frame.getContentPane().add(MailBoxList);
 		
 		passwordField = new JPasswordField();
+		
 		passwordField.setBounds(773, 243, 190, 35);
 		frame.getContentPane().add(passwordField);
-		passwordField.addActionListener(new ActionListener()
+		passwordField.addKeyListener(new KeyListener()
 				{
 
 					@Override
-					public void actionPerformed(ActionEvent e) {
-						JLabel capswarn = new JLabel("Caps Lock已經啟用");
-						capswarn.setFont(new Font("微軟正黑體", Font.PLAIN, 14));
-						capswarn.setBounds(773, 251, 190, 35);
-						System.out.println(Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK));
-						//caps-lock active
-						if(Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK))
-						{
-							capswarn.setVisible(true);
-							frame.getContentPane().add(capswarn);
-						}
-						else capswarn.setVisible(false);
+					public void keyPressed(KeyEvent ke) {
+						int key = ke.getKeyCode();
+						if(key == KeyEvent.VK_ENTER)
+							SendRequest();
 					}
+
+					@Override
+					public void keyReleased(KeyEvent ke) {
+					}
+
+					@Override
+					public void keyTyped(KeyEvent ke) {
+
+					}
+
+					
 			
 				});
+		passwordField.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				JLabel capswarn = new JLabel("Caps Lock已經啟用");
+				capswarn.setFont(new Font("微軟正黑體", Font.PLAIN, 14));
+				capswarn.setBounds(773,500, 190, 35);
+				//System.out.println(Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK));
+				//caps-lock active
+				if(Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK))
+				{
+					capswarn.setVisible(true);
+					frame.getContentPane().add(capswarn);
+				}
+				else capswarn.setVisible(false);
+
+			}
+
+			@Override
+			public void focusLost(FocusEvent arg0) {
+			}
+			
+		});
 		
 		JScrollPane scrollPane = new JScrollPane(new JLabel(new ImageIcon(image)));
 		scrollPane.setBounds(0, 0, 745, 561);
@@ -116,14 +149,10 @@ public class LoginPage {
 		frame.getContentPane().add(btnLogin);
 		btnLogin.addActionListener(new ActionListener()
 				{
-
+				
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						String account = accountField.getText();
-						String password = passwordField.getText();
-						System.out.println(account + "/" + password);
-						
-						
+						SendRequest();
 					}
 			
 				});
@@ -173,4 +202,32 @@ public class LoginPage {
 	        UIManager.put (key, f);
 	      }
 	    } 
+	
+	
+	public void SendRequest()
+	{
+		boolean loginSuccess = false;
+		String account = accountField.getText();
+		String password = passwordField.getText();
+		/*if(account == "" || password == "")
+		{
+			JOptionPane.showMessageDialog(null,"欄位不得為空!","Error",JOptionPane.ERROR_MESSAGE);
+			return;
+		}*/
+		
+		System.out.println(account + "/"); //+ password);
+		//Server Authorization
+		Read SA = new Read(account,password);
+		loginSuccess = SA.logintoServer();
+		
+		if(loginSuccess)//if correct go next frame
+		{
+			frame.setVisible(false);
+			String title = "Xmail - " +account;
+			MainPage MPG = new MainPage(title,SA);
+
+		}
+		
+		
+	}
 }
