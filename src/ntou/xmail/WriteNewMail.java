@@ -1,140 +1,137 @@
 package ntou.xmail;
 
-import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.internet.MimeMultipart;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.Date;
-import java.util.Properties;
-import java.awt.event.ActionEvent;
 
 public class WriteNewMail {
+
 	private String[] accountdata;
 	private JFrame frame;
 	private JTextField sendToField;
 	private JTextField ccField;
 	private JTextField SubjectField;
 	private JTextArea contField;
+	private Multipart multipart;
 
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					WriteNewMail window = new WriteNewMail();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
+	public WriteNewMail(String[] arg) {
+		/**
+		 * @wbp.parser.constructor
+		 */
 
-	/**
-	 * Create the application.
-	 * @wbp.parser.constructor 
-	 */
-
-	/**
-	 * Create the application.
-	 */
-	public WriteNewMail(String [] arg) {
 		accountdata = new String[2];// arg;
 		accountdata = arg;
+		multipart = new MimeMultipart();
 		initialize();
 	}
 
-	//reply-method
-	public WriteNewMail(String[] arg,String val,String resub)
-	{
-		accountdata = arg;
-		initialize();
-		sendToField.setText(val);
-		SubjectField.setText("Re: " + resub);
-		
-	}
-	//forward-method
-		public WriteNewMail(String[] arg,String resub)
-		{
-			accountdata = arg;
-			initialize();
-			SubjectField.setText("Fwd: " + resub);
-			
-		}
+	// reply-method
+	/*
+	 * public WriteNewMail(String[] arg,String val,String resub) {
+	 * 
+	 * accountdata = arg; initialize(); sendToField.setText(val); multipart = new
+	 * MimeMultipart(); SubjectField.setText("Re: " + resub);
+	 * 
+	 * }
+	 */
+	// forward-method
+	/*
+	 * public WriteNewMail(String[] arg,String resub) {
+	 * 
+	 * accountdata = arg; multipart = new MimeMultipart(); initialize();
+	 * SubjectField.setText("Fwd: " + resub);
+	 * 
+	 * }
+	 */
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame("¼¶¼g¶l¥ó");
+		frame = new JFrame("ï¿½ï¿½ï¿½gï¿½lï¿½ï¿½");
 		frame.setBounds(100, 100, 700, 400);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
 		frame.setVisible(true);
-		
+
 		JLabel lblNewLabel = new JLabel("\u6536\u4EF6\u4EBA:");
 		lblNewLabel.setBounds(10, 39, 46, 15);
 		frame.getContentPane().add(lblNewLabel);
-		
+
 		JLabel label = new JLabel("\u526F\u672C:");
 		label.setBounds(10, 64, 46, 15);
 		frame.getContentPane().add(label);
-		
+
 		JLabel label_1 = new JLabel("\u4E3B\u65E8:");
 		label_1.setBounds(10, 89, 46, 15);
 		frame.getContentPane().add(label_1);
-		
+
 		contField = new JTextArea();
-		contField.setBounds(10, 121, 664, 230);
+		contField.setBounds(10, 150, 664, 201);
 		frame.getContentPane().add(contField);
-		
+
 		sendToField = new JTextField();
 		sendToField.setBounds(66, 36, 608, 21);
 		frame.getContentPane().add(sendToField);
 		sendToField.setColumns(10);
-		
+
 		ccField = new JTextField();
 		ccField.setColumns(10);
 		ccField.setBounds(66, 61, 608, 21);
 		frame.getContentPane().add(ccField);
-		
+
 		SubjectField = new JTextField();
 		SubjectField.setColumns(10);
 		SubjectField.setBounds(66, 86, 608, 21);
 		frame.getContentPane().add(SubjectField);
-		
-		JButton button = new JButton("\u5BC4\u51FA");
-		button.addActionListener(new ActionListener() {
+
+		JButton sendButton = new JButton("\u5BC4\u51FA");
+		sendButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Send mail
-				mailFormat MFF = new mailFormat(accountdata[0],sendToField.getText(),SubjectField.getText(),contField.getText(),0);
-				sendMail ss = new sendMail(MFF);
+				// Send mail
+				mailFormat MFF = new mailFormat(accountdata[0], sendToField.getText(), SubjectField.getText(),
+						contField.getText(), 0);
+				sendMail ss = new sendMail(MFF, multipart);
 				boolean result = ss.RUN();
-				if(result)
-				{
-					JOptionPane.showMessageDialog(null, "«H¥ó¤w±H¥X!", "Success", JOptionPane.INFORMATION_MESSAGE);
+				if (result) {
+					JOptionPane.showMessageDialog(null, "ï¿½Hï¿½ï¿½wï¿½Hï¿½X!", "Success", JOptionPane.INFORMATION_MESSAGE);
 					frame.dispose();
 				}
-				
-				
+
 			}
 		});
-		button.setBounds(10, 6, 87, 23);
-		frame.getContentPane().add(button);
-	}
+		sendButton.setBounds(10, 6, 87, 23);
+		frame.getContentPane().add(sendButton);
 
+		JButton addAttachmentButton = new JButton("\u52A0\u5165\u9644\u4EF6..");
+		addAttachmentButton.setBounds(108, 6, 87, 23);
+		frame.getContentPane().add(addAttachmentButton);
+		addAttachmentButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				String seletedFile = FileChooser.chooseFile();
+				if (!(seletedFile == null)) {
+					try {
+						System.out.println("Attachment Added!!!!!!!!!!!");
+						Attachment.addAttachment(multipart, seletedFile);
+					} catch (MessagingException e) {
+						e.printStackTrace();
+					}
+				}
+
+			}
+
+		});
+	}
 }

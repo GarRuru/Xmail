@@ -8,14 +8,10 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
-import java.awt.BorderLayout;
 import javax.swing.JTextField;
 import javax.imageio.ImageIO;
 import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
-import javax.swing.JRootPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -29,12 +25,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.UIManager;
+import pttTest.PTTClient;
+import pttTest.pttMainPage;
 
 public class LoginPage {
 	private JFrame frame;
 	private JTextField accountField;
 	private JPasswordField passwordField;
-	Read SA;	//NTOU-login Method
+	public static PTTClient ptc;
+	Read SA; // NTOU-login Method
 	String logopath = "email.png";
 	BufferedImage image;
 
@@ -65,32 +64,51 @@ public class LoginPage {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
-		setUIFont (new javax.swing.plaf.FontUIResource("·L³n¥¿¶ÂÅé",Font.PLAIN,14));
+
+		setUIFont(new javax.swing.plaf.FontUIResource("ï¿½Lï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", Font.PLAIN, 14));
 		try {
 			image = ImageIO.read(new File(logopath));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		frame = new JFrame("Xmail");
 		frame.setBounds(100, 100, 1000, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
-		accountField = new JTextField();
 		
+		final String[] mailList = { "NTOU Mail", "PPTï¿½ï¿½ï¿½ï¿½ï¿½H" };
+		JComboBox MailBoxList = new JComboBox(mailList);
+		MailBoxList.setBounds(773, 88, 190, 35);
+		frame.getContentPane().add(MailBoxList);
+
+
+		
+		
+		accountField = new JTextField();
+
 		accountField.setBounds(773, 165, 190, 35);
 		frame.getContentPane().add(accountField);
 		accountField.setColumns(10);
-		accountField.addKeyListener(new KeyListener()
-		{
+		accountField.addKeyListener(new KeyListener() {
 
 			@Override
 			public void keyPressed(KeyEvent ke) {
 				int key = ke.getKeyCode();
-				if(key == KeyEvent.VK_ENTER)
-					SendRequest();
+				if (key == KeyEvent.VK_ENTER)
+				{
+					if(MailBoxList.getSelectedItem().toString() == "NTOU Mail")
+						SendRequest();
+					else
+						try {
+							PTTRequest();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					
+						
+				}
 			}
 
 			@Override
@@ -103,150 +121,176 @@ public class LoginPage {
 			}
 
 		});
-		
-		
-		final String[] mailList = {"NTOU Mail","Gmail", "PPT" };
-		JComboBox MailBoxList = new JComboBox(mailList);
-		MailBoxList.setBounds(773, 88, 190, 35);
-		frame.getContentPane().add(MailBoxList);
-		
+
 		passwordField = new JPasswordField();
-		
+
 		passwordField.setBounds(773, 243, 190, 35);
 		frame.getContentPane().add(passwordField);
-		passwordField.addKeyListener(new KeyListener()
+		passwordField.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyPressed(KeyEvent ke) {
+				int key = ke.getKeyCode();
+				if (key == KeyEvent.VK_ENTER)
 				{
+					if(MailBoxList.getSelectedItem().toString() == "NTOU Mail")
+						SendRequest();
+					else
+						try {
+							PTTRequest();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+	
+				}
+			}
 
-					@Override
-					public void keyPressed(KeyEvent ke) {
-						int key = ke.getKeyCode();
-						if(key == KeyEvent.VK_ENTER)
-							SendRequest();
-					}
+			@Override
+			public void keyReleased(KeyEvent ke) {
+			}
 
-					@Override
-					public void keyReleased(KeyEvent ke) {
-					}
+			@Override
+			public void keyTyped(KeyEvent ke) {
 
-					@Override
-					public void keyTyped(KeyEvent ke) {
+			}
 
-					}
-
-				});
+		});
 		passwordField.addFocusListener(new FocusListener() {
 
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				JLabel capswarn = new JLabel("Caps Lock¤w¸g±Ò¥Î");
-				capswarn.setFont(new Font("·L³n¥¿¶ÂÅé", Font.PLAIN, 14));
-				capswarn.setBounds(773,500, 190, 35);
-				//System.out.println(Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK));
-				//caps-lock active
-				if(Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK))
-				{
+				JLabel capswarn = new JLabel("Caps Lockï¿½wï¿½gï¿½Ò¥ï¿½");
+				capswarn.setFont(new Font("ï¿½Lï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", Font.PLAIN, 14));
+				capswarn.setBounds(773, 500, 190, 35);
+				// System.out.println(Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK));
+				// caps-lock active
+				if (Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)) {
 					capswarn.setVisible(true);
 					frame.getContentPane().add(capswarn);
-				}
-				else capswarn.setVisible(false);
+				} else
+					capswarn.setVisible(false);
 
 			}
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
 			}
-			
+
 		});
-		
+
 		JScrollPane scrollPane = new JScrollPane(new JLabel(new ImageIcon(image)));
 		scrollPane.setBounds(0, 0, 745, 561);
 		frame.getContentPane().add(scrollPane);
-		
+
 		JButton btnLogin = new JButton("Login");
 		btnLogin.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
 		btnLogin.setBounds(822, 314, 87, 23);
 		frame.getContentPane().add(btnLogin);
-		btnLogin.addActionListener(new ActionListener()
-				{
-				
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						SendRequest();
+		btnLogin.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(MailBoxList.getSelectedItem().toString() == "NTOU Mail")
+					SendRequest();
+				else
+					try {
+						PTTRequest();
+					} catch (Exception e1) {
+						e1.printStackTrace();
 					}
-			
-				});
-		
-		
-		
+			}
+
+		});
+
 		JButton btnClear = new JButton("Clear");
 		btnClear.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
 		btnClear.setBounds(822, 357, 87, 23);
 		frame.getContentPane().add(btnClear);
-		btnClear.addActionListener(new ActionListener()
-				{
+		btnClear.addActionListener(new ActionListener() {
 
-					@Override
-					public void actionPerformed(ActionEvent ev) {
-						//clear Account and password field
-						accountField.setText("");
-						passwordField.setText("");
-						
-					}
-			
-				}
-		);
+			@Override
+			public void actionPerformed(ActionEvent ev) {
+				// clear Account and password field
+				accountField.setText("");
+				passwordField.setText("");
+
+			}
+
+		});
 		JLabel label = new JLabel("\u8ACB\u9078\u64C7\u767B\u5165\u4FE1\u7BB1\u985E\u5225");
-		label.setFont(new Font("·L³n¥¿¶ÂÅé", Font.PLAIN, 14));
+		label.setFont(new Font("ï¿½Lï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", Font.PLAIN, 14));
 		label.setBounds(773, 63, 136, 15);
 		frame.getContentPane().add(label);
-		
+
 		JLabel label_1 = new JLabel("\u4F7F\u7528\u8005\u5E33\u865F");
-		label_1.setFont(new Font("·L³n¥¿¶ÂÅé", Font.PLAIN, 14));
+		label_1.setFont(new Font("ï¿½Lï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", Font.PLAIN, 14));
 		label_1.setBounds(773, 132, 110, 23);
 		frame.getContentPane().add(label_1);
-		
+
 		JLabel label_2 = new JLabel("\u4F7F\u7528\u8005\u5BC6\u78BC");
-		label_2.setFont(new Font("·L³n¥¿¶ÂÅé", Font.PLAIN, 14));
+		label_2.setFont(new Font("ï¿½Lï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", Font.PLAIN, 14));
 		label_2.setBounds(773, 210, 110, 23);
 		frame.getContentPane().add(label_2);
 	}
-	
-	//Font Properties
-	public static void setUIFont (javax.swing.plaf.FontUIResource f){
-	    java.util.Enumeration keys = UIManager.getDefaults().keys();
-	    while (keys.hasMoreElements()) {
-	      Object key = keys.nextElement();
-	      Object value = UIManager.get (key);
-	      if (value instanceof javax.swing.plaf.FontUIResource)
-	        UIManager.put (key, f);
-	      }
-	    } 
-	
-	
-	public void SendRequest()
-	{
+
+	// Font Properties
+	public static void setUIFont(javax.swing.plaf.FontUIResource f) {
+		java.util.Enumeration keys = UIManager.getDefaults().keys();
+		while (keys.hasMoreElements()) {
+			Object key = keys.nextElement();
+			Object value = UIManager.get(key);
+			if (value instanceof javax.swing.plaf.FontUIResource)
+				UIManager.put(key, f);
+		}
+	}
+
+	public void SendRequest() {
 		boolean loginSuccess = false;
 		String account = accountField.getText();
 		String password = passwordField.getText();
-		/*if(account == "" || password == "")
-		{
-			JOptionPane.showMessageDialog(null,"Äæ¦ì¤£±o¬°ªÅ!","Error",JOptionPane.ERROR_MESSAGE);
-			return;
-		}*/
-		
-		System.out.println(account + "/"); //+ password);
-		//Server Authorization
-		Read SA = new Read(account,password);
+		/*
+		 * if(account == "" || password == "") {
+		 * JOptionPane.showMessageDialog(null,"ï¿½ï¿½ì¤£ï¿½oï¿½ï¿½ï¿½ï¿½!","Error",JOptionPane.
+		 * ERROR_MESSAGE); return; }
+		 */
+
+		System.out.println(account + "/"); // + password);
+		// Server Authorization
+		Read SA = new Read(account, password);
 		loginSuccess = SA.logintoServer();
-		
-		if(loginSuccess)//if correct go next frame
+
+		if (loginSuccess)// if correct go next frame
 		{
 			frame.setVisible(false);
-			String title = "Xmail - " +account;
-			MainPage MPG = new MainPage(title,SA,account,password);
+			String title = "Xmail - " + account;
+			MainPage MPG = new MainPage(title, SA, account, password);
 
 		}
-		
-		
+
+	}
+	
+	private void PTTRequest() throws Exception
+	{
+		boolean loginSuccess = false; 
+		try {
+			ptc = new PTTClient();
+			String UID = accountField.getText();
+			String pwd = passwordField.getText();
+			loginSuccess = ptc.login(UID, pwd);
+			if(loginSuccess)
+			{
+				frame.setVisible(false);
+				pttMainPage pmp = new pttMainPage(ptc,"PTT MailBox - " + UID);
+				
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "ï¿½bï¿½ï¿½ï¿½Î±Kï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½T", "Login Failed", JOptionPane.ERROR_MESSAGE);
+			}
+				
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

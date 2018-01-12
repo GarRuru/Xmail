@@ -104,13 +104,18 @@ public class MainPage extends JFrame{
 		panel_2.setLayout(null);
 		
 		JTextArea mpContext = new JTextArea();
-		JScrollPane sp = new JScrollPane(mpContext);
-		sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		
 		mpContext.setEditable(false);
 		mpContext.setBounds(10, 84, 464, 418);
+		
+		
+		//JScrollPane sp = new JScrollPane(mpContext,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		//mpContext.add(sp);
+		//JScrollPane sp = new JScrollPane();
+		//sp.setViewportView(mpContext);
+		//frame.getContentPane().add(sp);
 		panel_2.add(mpContext);
-		panel_2.add(sp);
+		
 		
 		JLabel mpSenderT = new JLabel("\u5BC4\u4EF6\u4EBA:");
 		mpSenderT.setBounds(10, 10, 46, 15);
@@ -199,11 +204,10 @@ public class MainPage extends JFrame{
 					mpSubject.setText(SA.Storage.get(mailPreviewList.getSelectedIndex()).getSubject());
 					mpTime.setText(SA.Storage.get(mailPreviewList.getSelectedIndex()).getDate());
 					mpContext.setText(SA.Storage.get(mailPreviewList.getSelectedIndex()).getContext());
+					//sp.revalidate();
 				}
 			}
 		});
-		
-		
 		
 		JList mailFolderList = new JList(SA.folder);
 		mailFolderList.setFont(new Font("·L³n¥¿¶ÂÅé Light", Font.PLAIN, 18));
@@ -221,8 +225,8 @@ public class MainPage extends JFrame{
 		replyButton.setIcon(new ImageIcon("/replyico.png"));
 		replyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				WriteNewMail wnm = new WriteNewMail(accountINFO,SA.Storage.get(mailPreviewList.getSelectedIndex()).getSenderEmail(),
-																SA.Storage.get(mailPreviewList.getSelectedIndex()).getSubject());
+				//WriteNewMail wnm = new WriteNewMail(accountINFO,SA.Storage.get(mailPreviewList.getSelectedIndex()).getSenderEmail(),
+				//												SA.Storage.get(mailPreviewList.getSelectedIndex()).getSubject());
 			}
 		});
 		replyButton.setBounds(120, 18, 87, 23);
@@ -232,7 +236,7 @@ public class MainPage extends JFrame{
 		forwardButton.setIcon(new ImageIcon("/forwardico.png"));
 		forwardButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WriteNewMail wnm = new WriteNewMail(accountINFO,SA.Storage.get(mailPreviewList.getSelectedIndex()).getSubject());
+				//WriteNewMail wnm = new WriteNewMail(accountINFO,SA.Storage.get(mailPreviewList.getSelectedIndex()).getSubject());
 			}
 		});
 		forwardButton.setBounds(224, 18, 87, 23);
