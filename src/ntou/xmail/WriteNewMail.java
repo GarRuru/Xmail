@@ -2,6 +2,7 @@ package ntou.xmail;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
@@ -12,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import data.SignatureManagerUI;
 
 public class WriteNewMail {
 
@@ -56,7 +59,7 @@ public class WriteNewMail {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame("ï¿½ï¿½ï¿½gï¿½lï¿½ï¿½");
+		frame = new JFrame("¼¶¼g¶l¥ó");
 		frame.setBounds(100, 100, 700, 400);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -78,6 +81,14 @@ public class WriteNewMail {
 		contField = new JTextArea();
 		contField.setBounds(10, 150, 664, 201);
 		frame.getContentPane().add(contField);
+		SignatureManagerUI SMU;
+		try {
+			SMU = new SignatureManagerUI();
+			contField.setText("\n\n\n--------------------\n\n"+SMU.getSignature());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 
 		sendToField = new JTextField();
 		sendToField.setBounds(66, 36, 608, 21);
@@ -103,7 +114,7 @@ public class WriteNewMail {
 				sendMail ss = new sendMail(MFF, multipart);
 				boolean result = ss.RUN();
 				if (result) {
-					JOptionPane.showMessageDialog(null, "ï¿½Hï¿½ï¿½wï¿½Hï¿½X!", "Success", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "«H¥ó¤w±H¥X!", "Success", JOptionPane.INFORMATION_MESSAGE);
 					frame.dispose();
 				}
 

@@ -1,38 +1,25 @@
 package ntou.xmail;
 
-import java.awt.EventQueue;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Vector;
-
-import javax.mail.MessagingException;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JSplitPane;
-import javax.swing.JLabel;
-import javax.swing.UIManager;
-import javax.xml.xpath.XPath;
-import javax.swing.JTable;
-import java.awt.Button;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.ActionEvent;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import java.awt.List;
+import java.io.IOException;
 
+import javax.mail.MessagingException;
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import java.awt.Font;
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
-import javax.swing.JEditorPane;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.UIManager;
+
+import data.SignatureManagerUI;
 
 public class MainPage extends JFrame{
 	private String account;
@@ -215,6 +202,22 @@ public class MainPage extends JFrame{
 		mailFolderList.setBounds(10, 113, 180, 399);
 		mailFolderList.setSelectedIndex(0);
 		panel.add(mailFolderList);
+		
+		JButton signatureSetupBtn = new JButton("\u500B\u4EBA\u7C3D\u540D\u6A94");
+		signatureSetupBtn.setBounds(17, 528, 128, 23);
+		panel.add(signatureSetupBtn);
+		signatureSetupBtn.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					try {
+						SignatureManagerUI SMU = new SignatureManagerUI();
+						SMU.initialize();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
 		
 		
 		JButton deleteButton = new JButton("\u522A\u9664");
