@@ -12,8 +12,11 @@ public class MyListCellRenderer extends DefaultListCellRenderer {
 		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		mailFormat label = (mailFormat) value;
 		// System.out.println("¤T¤p°Õ"+label.getDate());
-
-		String labelText = "<html>[" + label.getDate().substring(4, 10) + "]<br/><b>" + label.getSenderEmail()
+		String Dt;
+		if(label.getDate() == "null")
+			Dt = "null";
+		else Dt = label.getDate().substring(4, 10);
+		String labelText = "<html>[" + Dt + "]<br/><b>" + label.getSenderEmail()
 				+ "</b><br/>" + label.getSubject();
 		setText(labelText);
 		return this;

@@ -1,5 +1,6 @@
 package ntou.xmail;
 
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
@@ -76,13 +78,9 @@ public class MainPage extends JFrame{
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 200, 561);
+		panel.setBounds(0, 0, 490, 561);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(200, 0, 301, 561);
-		frame.getContentPane().add(panel_1);
 		
 		
 		JPanel panel_2 = new JPanel();
@@ -93,7 +91,12 @@ public class MainPage extends JFrame{
 		JTextArea mpContext = new JTextArea();
 		
 		mpContext.setEditable(false);
+		mpContext.setLineWrap(true);
 		mpContext.setBounds(10, 84, 464, 418);
+		
+		//JScrollPane sp = new JScrollPane(mpContext);
+		//sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
 		
 		
 		//JScrollPane sp = new JScrollPane(mpContext,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -102,8 +105,7 @@ public class MainPage extends JFrame{
 		//sp.setViewportView(mpContext);
 		//frame.getContentPane().add(sp);
 		panel_2.add(mpContext);
-		
-		
+				
 		JLabel mpSenderT = new JLabel("\u5BC4\u4EF6\u4EBA:");
 		mpSenderT.setBounds(10, 10, 46, 15);
 		panel_2.add(mpSenderT);
@@ -143,26 +145,14 @@ public class MainPage extends JFrame{
 		lblNewLabel.setBounds(10, 10, 161, 33);
 		panel.add(lblNewLabel);
 		
-		
-		
-		JButton searchButton = new JButton("\u641C\u5C0B");
-		searchButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		searchButton.setBounds(114, 49, 76, 39);
-		panel.add(searchButton);
-		
 		JButton writeNewMail = new JButton("\u64B0\u5BEB\u90F5\u4EF6");
 		writeNewMail.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				WriteNewMail nm = new WriteNewMail(accountINFO);
 			}
 		});
-		writeNewMail.setBounds(10, 50, 94, 38);
+		writeNewMail.setBounds(10, 50, 180, 38);
 		panel.add(writeNewMail);
-		panel_1.setLayout(null);
 		
 		//Vector mailVect = new Vector();
 		//for(mailFormat m : SA.Storage)
@@ -172,12 +162,35 @@ public class MainPage extends JFrame{
 		DefaultListModel model = new DefaultListModel();
 		for(mailFormat m: SA.Storage)
 			model.addElement(m);
+		
+		
+		
+		//資料夾列表
+		JList mailFolderList = new JList(SA.folder);
+		mailFolderList.setFont(new Font("微軟正黑體 Light", Font.PLAIN, 18));
+		mailFolderList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		mailFolderList.setBounds(10, 113, 180, 370);
+		mailFolderList.setSelectedIndex(0);
+		panel.add(mailFolderList);
+		
+		JButton signatureSetupBtn = new JButton("\u500B\u4EBA\u7C3D\u540D\u6A94");
+		signatureSetupBtn.setBounds(17, 528, 128, 23);
+		panel.add(signatureSetupBtn);
+		
+		JButton calculatorButton = new JButton("\u884C\u4E8B\u66C6");
+		calculatorButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ntou.x.calendar.Cal cal = new ntou.x.calendar.Cal();
+			}
+		});
+		calculatorButton.setBounds(17, 493, 128, 23);
+		panel.add(calculatorButton);
 		JList mailPreviewList = new JList(model);
+		mailPreviewList.setBounds(209, 10, 281, 541);
+		panel.add(mailPreviewList);
 		mailPreviewList.setCellRenderer(new MyListCellRenderer());
-		mailPreviewList.setBounds(10, 10, 281, 541);
 		mailPreviewList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		mailPreviewList.setFont(new Font("微軟正黑體", Font.PLAIN, 14));
-		panel_1.add(mailPreviewList);
 		mailPreviewList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e)
@@ -196,16 +209,9 @@ public class MainPage extends JFrame{
 			}
 		});
 		
-		JList mailFolderList = new JList(SA.folder);
-		mailFolderList.setFont(new Font("微軟正黑體 Light", Font.PLAIN, 18));
-		mailFolderList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		mailFolderList.setBounds(10, 113, 180, 399);
-		mailFolderList.setSelectedIndex(0);
-		panel.add(mailFolderList);
+		//JScrollPane mpSList = new JScrollPane(mailPreviewList);
+		//panel.add(mpSList,BorderLayout.EAST);
 		
-		JButton signatureSetupBtn = new JButton("\u500B\u4EBA\u7C3D\u540D\u6A94");
-		signatureSetupBtn.setBounds(17, 528, 128, 23);
-		panel.add(signatureSetupBtn);
 		signatureSetupBtn.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
@@ -222,14 +228,15 @@ public class MainPage extends JFrame{
 		
 		JButton deleteButton = new JButton("\u522A\u9664");
 		deleteButton.setBounds(20, 18, 87, 23);
+		deleteButton.setVisible(false);
 		panel_3.add(deleteButton);
 		
 		JButton replyButton = new JButton("\u56DE\u8986");
 		replyButton.setIcon(new ImageIcon("/replyico.png"));
 		replyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//WriteNewMail wnm = new WriteNewMail(accountINFO,SA.Storage.get(mailPreviewList.getSelectedIndex()).getSenderEmail(),
-				//												SA.Storage.get(mailPreviewList.getSelectedIndex()).getSubject());
+				WriteNewMail wnm = new WriteNewMail(accountINFO,SA.Storage.get(mailPreviewList.getSelectedIndex()).getSenderEmail(),
+																SA.Storage.get(mailPreviewList.getSelectedIndex()).getSubject());
 			}
 		});
 		replyButton.setBounds(120, 18, 87, 23);
@@ -239,7 +246,7 @@ public class MainPage extends JFrame{
 		forwardButton.setIcon(new ImageIcon("/forwardico.png"));
 		forwardButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//WriteNewMail wnm = new WriteNewMail(accountINFO,SA.Storage.get(mailPreviewList.getSelectedIndex()).getSubject());
+				WriteNewMail wnm = new WriteNewMail(accountINFO,SA.Storage.get(mailPreviewList.getSelectedIndex()).getSubject());
 			}
 		});
 		forwardButton.setBounds(224, 18, 87, 23);

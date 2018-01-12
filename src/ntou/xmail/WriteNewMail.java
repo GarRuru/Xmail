@@ -38,23 +38,23 @@ public class WriteNewMail {
 	}
 
 	// reply-method
-	/*
-	 * public WriteNewMail(String[] arg,String val,String resub) {
-	 * 
-	 * accountdata = arg; initialize(); sendToField.setText(val); multipart = new
-	 * MimeMultipart(); SubjectField.setText("Re: " + resub);
-	 * 
-	 * }
-	 */
+	
+	  public WriteNewMail(String[] arg,String val,String resub) {
+	  
+	  accountdata = arg; initialize(); sendToField.setText(val); multipart = new
+	  MimeMultipart(); SubjectField.setText("Re: " + resub);
+	  
+	  }
+	 
 	// forward-method
-	/*
-	 * public WriteNewMail(String[] arg,String resub) {
-	 * 
-	 * accountdata = arg; multipart = new MimeMultipart(); initialize();
-	 * SubjectField.setText("Fwd: " + resub);
-	 * 
-	 * }
-	 */
+	
+	  public WriteNewMail(String[] arg,String resub) {
+	  
+	  accountdata = arg; multipart = new MimeMultipart(); initialize();
+	  SubjectField.setText("Fwd: " + resub);
+	 
+	  }
+	 
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -80,6 +80,7 @@ public class WriteNewMail {
 
 		contField = new JTextArea();
 		contField.setBounds(10, 150, 664, 201);
+		contField.setLineWrap(true);
 		frame.getContentPane().add(contField);
 		SignatureManagerUI SMU;
 		try {
@@ -122,27 +123,5 @@ public class WriteNewMail {
 		});
 		sendButton.setBounds(10, 6, 87, 23);
 		frame.getContentPane().add(sendButton);
-
-		JButton addAttachmentButton = new JButton("\u52A0\u5165\u9644\u4EF6..");
-		addAttachmentButton.setBounds(108, 6, 87, 23);
-		frame.getContentPane().add(addAttachmentButton);
-		addAttachmentButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
-				String seletedFile = FileChooser.chooseFile();
-				if (!(seletedFile == null)) {
-					try {
-						System.out.println("Attachment Added!!!!!!!!!!!");
-						Attachment.addAttachment(multipart, seletedFile);
-					} catch (MessagingException e) {
-						e.printStackTrace();
-					}
-				}
-
-			}
-
-		});
 	}
 }

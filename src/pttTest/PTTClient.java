@@ -117,7 +117,7 @@ public class PTTClient {
 		for(int i = 0; i < nc;++i) {
 			char c = cb[i];
 			switch(c) {
-			case 0x08:
+		 	case 0x08:
 				continue;
 			case 0x0A:
 			case 0X0D:

@@ -85,7 +85,7 @@ public class pttMainPage {
 		frame.getContentPane().add(pttCont);
 		
 		JLabel pttFrom = new JLabel("\u4F86\u81EA\uFF1A");
-		pttFrom.setBounds(301, 72, 46, 15);
+		pttFrom.setBounds(301, 72, 46, 15); 
 		frame.getContentPane().add(pttFrom);
 		
 		JLabel pttTime = new JLabel("\u6642\u9593\uFF1A");

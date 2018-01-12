@@ -30,6 +30,7 @@ public class SignatureManagerUI {
 		
 		JTextArea textArea = new JTextArea();
 		textArea.setBounds(10, 84, 414, 317);
+		textArea.setLineWrap(true);
 		frame.getContentPane().add(textArea);
 		textArea.setText(this.getSignature());
 		

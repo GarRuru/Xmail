@@ -87,7 +87,7 @@ public class LoginPage {
 		
 		
 		accountField = new JTextField();
-	
+
 		accountField.setBounds(773, 165, 190, 35);
 		frame.getContentPane().add(accountField);
 		accountField.setColumns(10);
@@ -123,7 +123,7 @@ public class LoginPage {
 		});
 
 		passwordField = new JPasswordField();
-	
+
 		passwordField.setBounds(773, 243, 190, 35);
 		frame.getContentPane().add(passwordField);
 		passwordField.addKeyListener(new KeyListener() {

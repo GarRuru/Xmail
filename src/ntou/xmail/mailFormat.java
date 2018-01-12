@@ -22,11 +22,13 @@ public class mailFormat {
 		this.context = context;
 		if(option==1)	
 		{
+			//System.out.println("魔術數字1");
 			String temp[] = sender.split("<");
 			this.senderEmail = temp[1].split(">");
 		}
 		else
 		{
+			//System.out.println("魔術數字0");
 			this.senderEmail = new String[1];
 			this.senderEmail[0] = sender;
 		}
