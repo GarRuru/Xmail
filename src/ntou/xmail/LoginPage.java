@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.imageio.ImageIO;
 import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
+import javax.swing.JRootPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ImageIcon;
@@ -65,7 +66,7 @@ public class LoginPage {
 	 */
 	private void initialize() {
 		
-		setUIFont (new javax.swing.plaf.FontUIResource("·L³n¥¿¶ÂÅé",Font.PLAIN,14));
+		setUIFont (new javax.swing.plaf.FontUIResource("ï¿½Lï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½",Font.PLAIN,14));
 		try {
 			image = ImageIO.read(new File(logopath));
 		} catch (IOException e) {
@@ -76,12 +77,32 @@ public class LoginPage {
 		frame.setBounds(100, 100, 1000, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+		frame.setResizable(false);
 		accountField = new JTextField();
-		
+
 		accountField.setBounds(773, 165, 190, 35);
 		frame.getContentPane().add(accountField);
 		accountField.setColumns(10);
+		accountField.addKeyListener(new KeyListener()
+		{
+
+			@Override
+			public void keyPressed(KeyEvent ke) {
+				int key = ke.getKeyCode();
+				if(key == KeyEvent.VK_ENTER)
+					SendRequest();
+			}
+
+			@Override
+			public void keyReleased(KeyEvent ke) {
+			}
+
+			@Override
+			public void keyTyped(KeyEvent ke) {
+
+			}
+
+		});
 		
 		
 		final String[] mailList = {"NTOU Mail","Gmail", "PPT" };
@@ -90,7 +111,7 @@ public class LoginPage {
 		frame.getContentPane().add(MailBoxList);
 		
 		passwordField = new JPasswordField();
-		
+
 		passwordField.setBounds(773, 243, 190, 35);
 		frame.getContentPane().add(passwordField);
 		passwordField.addKeyListener(new KeyListener()
@@ -112,15 +133,13 @@ public class LoginPage {
 
 					}
 
-					
-			
 				});
 		passwordField.addFocusListener(new FocusListener() {
 
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				JLabel capswarn = new JLabel("Caps Lock¤w¸g±Ò¥Î");
-				capswarn.setFont(new Font("·L³n¥¿¶ÂÅé", Font.PLAIN, 14));
+				JLabel capswarn = new JLabel("Caps Lockï¿½wï¿½gï¿½Ò¥ï¿½");
+				capswarn.setFont(new Font("ï¿½Lï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", Font.PLAIN, 14));
 				capswarn.setBounds(773,500, 190, 35);
 				//System.out.println(Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK));
 				//caps-lock active
@@ -177,17 +196,17 @@ public class LoginPage {
 				}
 		);
 		JLabel label = new JLabel("\u8ACB\u9078\u64C7\u767B\u5165\u4FE1\u7BB1\u985E\u5225");
-		label.setFont(new Font("·L³n¥¿¶ÂÅé", Font.PLAIN, 14));
+		label.setFont(new Font("ï¿½Lï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", Font.PLAIN, 14));
 		label.setBounds(773, 63, 136, 15);
 		frame.getContentPane().add(label);
 		
 		JLabel label_1 = new JLabel("\u4F7F\u7528\u8005\u5E33\u865F");
-		label_1.setFont(new Font("·L³n¥¿¶ÂÅé", Font.PLAIN, 14));
+		label_1.setFont(new Font("ï¿½Lï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", Font.PLAIN, 14));
 		label_1.setBounds(773, 132, 110, 23);
 		frame.getContentPane().add(label_1);
 		
 		JLabel label_2 = new JLabel("\u4F7F\u7528\u8005\u5BC6\u78BC");
-		label_2.setFont(new Font("·L³n¥¿¶ÂÅé", Font.PLAIN, 14));
+		label_2.setFont(new Font("ï¿½Lï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", Font.PLAIN, 14));
 		label_2.setBounds(773, 210, 110, 23);
 		frame.getContentPane().add(label_2);
 	}
@@ -211,7 +230,7 @@ public class LoginPage {
 		String password = passwordField.getText();
 		/*if(account == "" || password == "")
 		{
-			JOptionPane.showMessageDialog(null,"Äæ¦ì¤£±o¬°ªÅ!","Error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null,"ï¿½ï¿½ì¤£ï¿½oï¿½ï¿½ï¿½ï¿½!","Error",JOptionPane.ERROR_MESSAGE);
 			return;
 		}*/
 		
@@ -224,7 +243,7 @@ public class LoginPage {
 		{
 			frame.setVisible(false);
 			String title = "Xmail - " +account;
-			MainPage MPG = new MainPage(title,SA);
+			MainPage MPG = new MainPage(title,SA,account,password);
 
 		}
 		

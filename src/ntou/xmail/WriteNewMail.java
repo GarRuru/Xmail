@@ -7,18 +7,20 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 import java.awt.event.ActionEvent;
 
 public class WriteNewMail {
-
+	private String[] accountdata;
 	private JFrame frame;
 	private JTextField sendToField;
 	private JTextField ccField;
@@ -49,10 +51,28 @@ public class WriteNewMail {
 	/**
 	 * Create the application.
 	 */
-	public WriteNewMail() {
+	public WriteNewMail(String [] arg) {
+		accountdata = arg;
 		initialize();
 	}
 
+	//reply-method
+	public WriteNewMail(String[] arg,String val,String resub)
+	{
+		accountdata = arg;
+		initialize();
+		sendToField.setText(val);
+		SubjectField.setText("Re: " + resub);
+		
+	}
+	//forward-method
+		public WriteNewMail(String[] arg,String resub)
+		{
+			accountdata = arg;
+			initialize();
+			SubjectField.setText("Fwd: " + resub);
+			
+		}
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -61,6 +81,7 @@ public class WriteNewMail {
 		frame.setBounds(100, 100, 700, 400);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.setResizable(false);
 		frame.setVisible(true);
 		
 		JLabel lblNewLabel = new JLabel("\u6536\u4EF6\u4EBA:");
@@ -98,6 +119,14 @@ public class WriteNewMail {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Send mail
+				Send ss = new Send(accountdata,sendToField.getText(),contField.getText());
+				try {
+					ss.SendMAIL();
+				} catch (MessagingException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		button.setBounds(10, 6, 87, 23);
