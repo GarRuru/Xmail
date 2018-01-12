@@ -14,14 +14,22 @@ public class mailFormat {
 	{
 		
 	}
-	public mailFormat(String sender,String date,String subject,String context)
+	public mailFormat(String sender,String date,String subject,String context,int option)
 	{
 		this.sender = sender;
 		this.date = date;
 		this.subject = subject;
 		this.context = context;
-		String temp[] = sender.split("<");
-		this.senderEmail = temp[1].split(">");
+		if(option==1)	
+		{
+			String temp[] = sender.split("<");
+			this.senderEmail = temp[1].split(">");
+		}
+		else
+		{
+			this.senderEmail = new String[1];
+			this.senderEmail[0] = sender;
+		}
 		//convert_UTF8();
 	}
 	

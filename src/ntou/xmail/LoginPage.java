@@ -79,7 +79,8 @@ public class LoginPage {
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
 		accountField = new JTextField();
-				accountField.setBounds(773, 165, 190, 35);
+		
+		accountField.setBounds(773, 165, 190, 35);
 		frame.getContentPane().add(accountField);
 		accountField.setColumns(10);
 		accountField.addKeyListener(new KeyListener()

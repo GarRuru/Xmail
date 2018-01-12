@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.mail.Message;
@@ -52,6 +53,7 @@ public class WriteNewMail {
 	 * Create the application.
 	 */
 	public WriteNewMail(String [] arg) {
+		accountdata = new String[2];// arg;
 		accountdata = arg;
 		initialize();
 	}
@@ -119,14 +121,16 @@ public class WriteNewMail {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Send mail
-				Send ss = new Send(accountdata,sendToField.getText(),contField.getText());
-				try {
-					ss.SendMAIL();
-				} catch (MessagingException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				mailFormat MFF = new mailFormat(accountdata[0],sendToField.getText(),SubjectField.getText(),contField.getText(),0);
+				sendMail ss = new sendMail(MFF);
+				boolean result = ss.RUN();
+				if(result)
+				{
+					JOptionPane.showMessageDialog(null, "信件已寄出!", "Success", JOptionPane.INFORMATION_MESSAGE);
+					frame.dispose();
 				}
+				
+				
 			}
 		});
 		button.setBounds(10, 6, 87, 23);

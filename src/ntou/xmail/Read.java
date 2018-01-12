@@ -1,8 +1,9 @@
-﻿package ntou.xmail;
+package ntou.xmail;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -58,7 +59,9 @@ public class  Read extends JFrame
 				props.put("mail.smtp.socketFactory.fallback", "false");
 				props.put("mail.smtp.socketFactory.port", "994");
 	
-									
+				//String username = "00457053@mail.ntou.edu.tw";
+				//String password = "A129765143";
+	
 				Session session = Session.getInstance(props, new javax.mail.Authenticator() {
 					protected PasswordAuthentication getPasswordAuthentication() {
 						return new PasswordAuthentication(userName, password);
@@ -113,20 +116,44 @@ public class  Read extends JFrame
 				for(Message msg : messages)
 				{
 					mailFormat MF;
-					
+					Multipart multipart=null;
 					String[] temp = new String[5];
-					Multipart multipart = (Multipart) msg.getContent();
+					
 					System.out.println("Date: "+msg.getSentDate());
 					System.out.println("From: " + msg.getFrom()[0]);
 					System.out.println("Subject: " + msg.getSubject());
 					System.out.println("Body:");
-					BodyPart body = multipart.getBodyPart(0);
-					System.out.println(body.getContent());
+					if(!(msg.getContent() instanceof String))
+					{
+						multipart = (Multipart) msg.getContent();
+						BodyPart body = multipart.getBodyPart(0);
+						System.out.println(body.getContent());
+						MF = new mailFormat(msg.getFrom()[0].toString(),msg.getSentDate().toString()
+								,msg.getSubject().toString(),body.getContent().toString(),1);
+
+						/*Enumeration header = msg.getAllHeaders();
+						while(header.hasMoreElements()) {
+							System.out.println("EE " + header.nextElement());
+						}*/
+						
+					}
+					else
+					{
+						//System.out.println("選項是0");
+						String cont = new String();
+						cont = msg.getContent().toString();
+						System.out.println(cont);
+						
+						
+						MF = new mailFormat(msg.getFrom()[0].toString(),msg.getSentDate().toString()
+								,msg.getSubject().toString(),cont,0);
+
+					}
+					
+					
 					System.out.println("----------------------------------END---------------------------");
 					
 					
-					MF = new mailFormat(msg.getFrom()[0].toString(),msg.getSentDate().toString()
-							,msg.getSubject().toString(),body.getContent().toString());
 					
 					
 					Storage.add(MF);

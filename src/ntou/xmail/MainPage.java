@@ -135,6 +135,7 @@ public class MainPage extends JFrame{
 		JLabel mpTime = new JLabel("");
 		mpTime.setBounds(66, 59, 408, 15);
 		panel_2.add(mpTime);
+		panel_2.setVisible(false);
 		frame.setVisible(true);
 		
 		JPanel panel_3 = new JPanel();
